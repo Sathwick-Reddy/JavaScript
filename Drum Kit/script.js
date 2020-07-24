@@ -11,10 +11,26 @@ function playMusic(e) {
 }
 
 function removeTransition(e) {
-    if(e.propertyName !== 'transform') return;
+    if(e.propertyName !== 'transform') {
+        return;
+    }
     this.classList.remove('playing');
 }
 
+function onClick(key) {
+    const audio = document.querySelector(`audio[data-key="${key.dataset.key}"]`)
+    if(!audio) {
+        return;
+    }
+    audio.currentTime = 0; // Rewind to the start
+    audio.play();
+    key.classList.add('playing');
+}
+
 const keys = document.querySelectorAll('.key')
-keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
 window.addEventListener('keydown', playMusic)
+keys.forEach(key => key.addEventListener('click', function () {
+    onClick(key)
+}))
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
